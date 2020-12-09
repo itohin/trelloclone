@@ -13,13 +13,13 @@ export default {
           userAssigned: null
         },
         {
-          description: '',
+          description: 'Description',
           name: 'second task',
           id: uuid(),
           userAssigned: null
         },
         {
-          description: '',
+          description: 'Description',
           name: 'and thrid',
           id: uuid(),
           userAssigned: null
