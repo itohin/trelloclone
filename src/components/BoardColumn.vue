@@ -1,46 +1,50 @@
 <template>
-    <div>
-      <div
-        class="column"
-        :key="columnIndex"
-        @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
-        draggable
-        @dragover.prevent
-        @dragenter.prevent
-        @dragstart.self="pickupColumn($event, columnIndex)"
-      >
-        <div class="flex items-center mb-2 font-bold">
-          {{ column.name }}
-        </div>
-        <div class="list-reset">
-          <ColumnTask
-            v-for="(task, $taskIndex) in column.tasks"
-            :key="$taskIndex"
-            :task="task"
-            :task-index="$taskIndex"
-            :column="column"
-            :board="board"
-            :column-index="columnIndex"
-          />
-          <input
-            type="text"
-            class="block p-2 w-full bg-transparent"
-            placeholder="+ Enter new task"
-            @keyup.enter="createTask($event, column.tasks)"
-          >
-        </div>
+  <AppDrop
+    @drop="moveTaskOrColumn"
+  >
+    <AppDrag
+      class="column"
+      :transfer-data="{
+        type: 'column',
+        fromColumnIndex: columnIndex
+      }"
+    >
+      <div class="flex items-center mb-2 font-bold">
+        {{ column.name }}
       </div>
-    </div>
+      <div class="list-reset">
+        <ColumnTask
+          v-for="(task, $taskIndex) in column.tasks"
+          :key="$taskIndex"
+          :task="task"
+          :task-index="$taskIndex"
+          :column="column"
+          :board="board"
+          :column-index="columnIndex"
+        />
+        <input
+          type="text"
+          class="block p-2 w-full bg-transparent"
+          placeholder="+ Enter new task"
+          @keyup.enter="createTask($event, column.tasks)"
+        >
+      </div>
+    </AppDrag>
+  </AppDrop>
 </template>
 
 <script>
 import ColumnTask from '@/components/ColumnTask.vue'
+import AppDrag from '@/components/AppDrag.vue'
+import AppDrop from '@/components/AppDrop.vue'
 import movingTasksAndColumnsMixin from '@/mixins/movingTasksAndColumnsMixin'
 
 export default {
   mixins: [movingTasksAndColumnsMixin],
   components: {
-    ColumnTask
+    ColumnTask,
+    AppDrag,
+    AppDrop
   },
   methods: {
     pickupColumn (e, $columnIndex) {
